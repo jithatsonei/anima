@@ -44,7 +44,6 @@ async execute(interaction, client) {
         components: [button],
     });
     setTimeout(() => {
-        button.components[0].setDisabled(true);
         interaction.editReply({ embeds: [adminembed], components: [button] });
     }, 120000);
 },

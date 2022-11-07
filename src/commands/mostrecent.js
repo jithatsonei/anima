@@ -22,19 +22,12 @@ async execute(interaction, client) {
 
     json = await getChase();
     mostRecent = json[0];
-    console.log(mostRecent);
     mostRecentID = mostRecent.ID;
-    console.log(mostRecentID);
     mostRecentTitle = mostRecent.Name;
-    console.log(mostRecentTitle);
     mostRecentDescription = mostRecent.Desc;
-    console.log(mostRecentDescription);
     mostRecentStartTime = mostRecent.CreatedAt;
-    console.log(mostRecentStartTime);
     mostRecentEndTime = mostRecent.EndedAt;
-    console.log(mostRecentEndTime);
     mostRecentImageURL = mostRecent.ImageURL;
-    console.log(mostRecentImageURL);
 
     const chaseembed = new EmbedBuilder()
         .setColor("#5865f4")
@@ -74,7 +67,6 @@ async execute(interaction, client) {
             components: [button],
         });
         setTimeout(() => {
-            button.components[0].setDisabled(true);
             interaction.editReply({ embeds: [chaseembed], components: [button] });
         }, 120000);
 }};
