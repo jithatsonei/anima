@@ -24,10 +24,10 @@ module.exports = async (client) => {
   (async () => {
     try {
       if (process.env.STATUS === "PRODUCTION") { // If the bot is in production mode it will load slash commands for all guilds
-        await rest.put(Routes.applicationCommands(client.user.id), {
+        await rest.put(Routes.applicationGuildCommands(client.user.id, process.env.GUILD_ID), {
           body: commands,
         });
-        console.log(`${ChalkAdvanced.white("Boilerplate Bot")} ${ChalkAdvanced.gray(">")} ${ChalkAdvanced.green("Successfully registered commands globally")}`);
+        console.log(`${ChalkAdvanced.white("ChaseBot")} ${ChalkAdvanced.gray(">")} ${ChalkAdvanced.green("Successfully registered commands locally")}`);
 
       } else {
         await rest.put(
@@ -37,7 +37,7 @@ module.exports = async (client) => {
           }
         );
 
-        console.log(`${ChalkAdvanced.white("Boilerplate Bot")} ${ChalkAdvanced.gray(">")} ${ChalkAdvanced.green("Successfully registered commands locally")}`);
+        console.log(`${ChalkAdvanced.white("ChaseBot")} ${ChalkAdvanced.gray(">")} ${ChalkAdvanced.green("Successfully registered commands locally")}`);
       }
     } catch (err) {
       if (err) console.error(err);
