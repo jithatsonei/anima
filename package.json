@@ -10,6 +10,8 @@
 
     "discord-api-types": "^0.37.15",
 
+    "discord-player": "^5.3.2",
+
     "discord.js": "^14.6.0",
 
     "dotenv": "^16.0.3",
