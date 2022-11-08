@@ -54,29 +54,21 @@ module.exports = {
         .addStringOption((option) =>
             option.setName('description')
                 .setDescription('Sets the description of the chase'))
-        // add subcommand for adding/editing network info
-        .addSubcommand((subcommand) =>
-            subcommand.setName('network')
-                .setDescription('Sets the network info of the chase')
-                .addStringOption((option) =>
-                    option.setName('name')
-                        .setDescription('Sets the name of the network')
-                        .setRequired(true))
-                .addStringOption((option) =>
-                    option.setName('url')
-                        .setDescription('Sets the url of the network')
-                        .setRequired(true))
-                .addStringOption((option) =>
-                    option.setName('icon')
-                        .setDescription('Sets the icon of the network')
-                        .setRequired(true))
-                .addStringOption((option) =>
-                    option.setName('tier')
-                        .setDescription('Sets the tier of the network')
-                        .setRequired(true))
-                .addStringOption((option) =>
-                    option.setName('other')
-                        .setDescription('Sets other info for the network'))),
+        .addStringOption((option) =>
+            option.setName('name')
+                .setDescription('Sets the name of the network'))
+        .addStringOption((option) =>
+            option.setName('url')
+                .setDescription('Sets the url of the network'))
+        .addStringOption((option) =>
+            option.setName('icon')
+                .setDescription('Sets the icon of the network'))
+        .addStringOption((option) =>
+            option.setName('tier')
+                .setDescription('Sets the tier of the network'))
+        .addStringOption((option) =>
+            option.setName('other')
+                .setDescription('Sets other info for the network')),
 
 
 async execute(interaction, client) {
@@ -98,28 +90,36 @@ async execute(interaction, client) {
         newJson.description = interaction.options.getString('description');
     }
     //check if network already exists within the network array of the newJson object, if it does then edit the network, if not then add the network
-    if (interaction.options.getSubcommand() === 'network') {
+    if (interaction.options.getString('name')) {
         var networkExists = false;
         for (var i = 0; i < newJson.networks.length; i++) {
-            if (newJson.networks[i].name === interaction.options.getString('name')) {
+            if (newJson.networks[i].name == interaction.options.getString('name')) {
                 networkExists = true;
-            }
-    //if network exists, edit the network within the array, other wise append the network to the array
-            if (networkExists) {
-                newJson.networks[i].url = interaction.options.getString('url');
-                newJson.networks[i].icon = interaction.options.getString('icon');
-                newJson.networks[i].tier = interaction.options.getString('tier');
-                newJson.networks[i].other = interaction.options.getString('other');
-            } else {
-                newJson.networks.push({
-                    name: interaction.options.getString('name'),
-                    url: interaction.options.getString('url'),
-                    icon: interaction.options.getString('icon'),
-                    tier: interaction.options.getString('tier'),
-                    other: interaction.options.getString('other'),
-                })
+                if (interaction.options.getString('url')) {
+                    newJson.networks[i].url = interaction.options.getString('url');
+                }
+                if (interaction.options.getString('icon')) {
+                    newJson.networks[i].icon = interaction.options.getString('icon');
+                }
+                if (interaction.options.getString('tier')) {
+                    newJson.networks[i].tier = interaction.options.getString('tier');
+                }
+                if (interaction.options.getString('other')) {
+                    newJson.networks[i].other = interaction.options.getString('other');
+                }
             }
         }
+        if (!networkExists) {
+            var newNetwork = {
+                name: interaction.options.getString('name'),
+                url: interaction.options.getString('url'),
+                icon: interaction.options.getString('icon'),
+                tier: interaction.options.getString('tier'),
+                other: interaction.options.getString('other'),
+            }
+            newJson.networks.push(newNetwork);
+        }
+    }
         
     const response = await editchase(newJson);
     const responseID = response.ID;
@@ -171,5 +171,4 @@ async execute(interaction, client) {
     }, 120000);
     
     }
-}
 }
