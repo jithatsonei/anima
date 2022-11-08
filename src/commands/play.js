@@ -29,13 +29,23 @@ module.exports = {
             .then(x => x.tracks[0]);
         queue.addTrack(track);
         if (!queue.playing) await queue.play();
-        //send a message to the channel with the song info
-        const embed = new EmbedBuilder()
-            .setTitle('Now Playing')
-            .setDescription(`[${track.title}](${track.url})`)
-            .setThumbnail(track.thumbnail)
-            .setColor('#00FF00')
-            .setTimestamp();
+        
+        //if there is already a song playing, notify the user its queued, otherwise notify the user its playing
+        if (queue.previousTracks.length > 1) {
+            var embed = new EmbedBuilder()
+                .setColor('#5865f4')
+                .setTitle('Queued')
+                .setDescription(`[${track.title}](${track.url})`)
+                .setThumbnail(track.thumbnail)
+                .setTimestamp();
+        } else {
+            var embed = new EmbedBuilder()
+                .setColor('#5865f4')
+                .setTitle('Now Playing')
+                .setDescription(`[${track.title}](${track.url})`)
+                .setThumbnail(track.thumbnail)
+                .setTimestamp();
+            }
         const row = new ActionRowBuilder()
             .addComponents(
                 new ButtonBuilder()
@@ -59,11 +69,12 @@ module.exports = {
                     .setCustomId('skip')
                     .setDisabled(false)
             );
+            
+        await interaction.reply({ embeds: [embed], components: [row] });
         //handle play pause stop and skip on the interaction, making sure to edit the original interaction to disable either the play or pause button
         interaction.client.on('interactionCreate', async interaction => {
             if (!interaction.isButton()) return;
             if (interaction.customId === 'pause') {
-                await interaction.deferUpdate();
                 queue.setPaused(true);
                 const row = new ActionRowBuilder()
                     .addComponents(
@@ -88,10 +99,9 @@ module.exports = {
                             .setCustomId('skip')
                             .setDisabled(false)
                     );
-                await interaction.editReply({content: 'Song Paused', components: [row]});
+                await interaction.update({content: 'Song Paused', components: [row]});
             }
             if (interaction.customId === 'play') {
-                await interaction.deferUpdate();
                 queue.setPaused(false);
                 const row = new ActionRowBuilder()
                     .addComponents(
@@ -116,21 +126,19 @@ module.exports = {
                             .setCustomId('skip')
                             .setDisabled(false)
                     );
-                await interaction.editReply({content: 'Song Resumed', components: [row]});
+                await interaction.update({content: 'Song Resumed', components: [row]});
             }
             if (interaction.customId === 'stop') {
-                await interaction.deferUpdate();
                 queue.destroy();
-                await interaction.editReply({content: 'Song Stopped', components: []});
+                await interaction.update({content: 'Song Stopped', components: []});
             }
             if (interaction.customId === 'skip') {
-                await interaction.deferUpdate();
                 queue.skip();
-                await interaction.editReply({content: 'Song Skipped', components: []});
+                await interaction.update({content: 'Song Skipped', components: []});
             }
         });
         //send the message
-        return interaction.reply({ embeds: [embed], components: [row] });
+        
         //handle pause stop skip on the interaction
     }
 };
