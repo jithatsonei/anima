@@ -1,13 +1,16 @@
 const { Client, GatewayIntentBits } = require('discord.js');
-
-/* Misc */
-console.clear();
+const { Player } = require('discord-player');
 
 /* Initialize client */
 const client = new Client({
     intents: [
       GatewayIntentBits.Guilds,
+      GatewayIntentBits.GuildVoiceStates
     ],
+});
+
+client.player = new Player(client, {
+    ytdlDownloadOptions: { filter: 'audioonly' }
 });
 
 const boilerplateComponents = async () => {
