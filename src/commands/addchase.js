@@ -15,37 +15,31 @@ module.exports = {
                 .setDescription('The description of the chase')
                 .setRequired(true))
         .addStringOption((option) =>
-            option.setName('network')
-                .setDescription('The name of the network')
-                .setRequired(true))
-        .addStringOption((option) =>
             option.setName('url')
                 .setDescription('The url of the network')
-                .setRequired(true)),
+                .setRequired(true))
+        .addStringOption((option) =>
+            option.setName('name')
+                .setDescription('The name of the network'))
+        .addStringOption((option) =>
+            option.setName('logo')
+                .setDescription('The logo of the network')),
     async execute(interaction) {
         //create a json object with the title, description, network name, and network url
-        const json = {
-            title: interaction.options.getString('title'),
-            description: interaction.options.getString('description'),
-            network: {
-                name: interaction.options.getString('network'),
-                url: interaction.options.getString('url')
-            }
-        }
+        const json = {name: interaction.options.getString('title'),desc: interaction.options.getString('description'),live: true,networks: [{name: interaction.options.getString('title'),url: interaction.options.getString('url'),logo: interaction.options.getString('logo'),Tier: 1,Other: '',}]}
         //axios POST request to https://us-central1-chaseapp-8459b.cloudfunctions.net/AddChase with json object and X-ApiKey
-        const response = await axios.post('https://us-central1-chaseapp-8459b.cloudfunctions.net/AddChase', {
-            json: json,
-        }, {
+        const response = await axios.post('https://us-central1-chaseapp-8459b.cloudfunctions.net/AddChase', json, 
+        {
             headers: {
                 'X-ApiKey': '8b373c2d-41bc-4a18-80f3-b3671f04930f',
                 'Content-Type': 'application/json',
             }
         })
+        console.log(response.data);
         //create a rich embed with the title, description, network name, and network url from the response
         const embed = new EmbedBuilder()
-            .setTitle(response.data.title)
-            .setDescription(response.data.description)
-            .addField('Network', `[${response.data.network.name}](${response.data.network.url})`)
+            .setTitle("Chase Added")
+            .setDescription("ID " + response.data)
             .setColor('#5865f4')
             .setTimestamp();
         //create a button that links to chaseapp.tv
