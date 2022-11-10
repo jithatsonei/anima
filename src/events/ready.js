@@ -32,7 +32,7 @@ module.exports = async (client) => {
         await rest.put(Routes.applicationGuildCommands(client.user.id, process.env.GUILD_ID), {
           body: commands,
         });
-        console.log(`${ChalkAdvanced.white("ChaseBot")} ${ChalkAdvanced.gray(">")} ${ChalkAdvanced.green("Successfully registered commands locally")}`);
+        console.log(`${ChalkAdvanced.white("anima ٩(◕‿◕｡)۶")} ${ChalkAdvanced.gray(">")} ${ChalkAdvanced.green("Successfully registered commands locally")}`);
 
       } else {
         await rest.put(
@@ -42,7 +42,7 @@ module.exports = async (client) => {
           }
         );
 
-        console.log(`${ChalkAdvanced.white("ChaseBot")} ${ChalkAdvanced.gray(">")} ${ChalkAdvanced.green("Successfully registered commands locally")}`);
+        console.log(`${ChalkAdvanced.white("anima ٩(◕‿◕｡)۶")} ${ChalkAdvanced.gray(">")} ${ChalkAdvanced.green("Successfully registered commands locally")}`);
       }
     } catch (err) {
       if (err) console.error(err);

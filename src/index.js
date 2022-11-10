@@ -14,7 +14,7 @@ client.player = new Player(client, {
 });
 
 const boilerplateComponents = async () => {
-  await require('./util/boilerplateClient')(client);
+  await require('./util/animaClient')(client);
 }
 
 boilerplateComponents();
